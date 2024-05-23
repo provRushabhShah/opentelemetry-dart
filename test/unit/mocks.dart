@@ -3,7 +3,7 @@
 
 import 'package:http/http.dart' as http;
 import 'package:mocktail/mocktail.dart';
-import 'package:opentelemetry/src/api/Logs/readable_log_record.dart';
+import 'package:opentelemetry/src/sdk/Logs/readable_log_record.dart';
 import 'package:opentelemetry/src/api/context/context.dart';
 import 'package:opentelemetry/src/api/trace/span.dart';
 import 'package:opentelemetry/src/sdk/Logs/expoters/log_record_expoter.dart';

@@ -39,5 +39,5 @@ export 'src/api/Logs/logger_builder.dart';
 export 'src/api/Logs/logger_provider.dart';
 export 'src/api/Logs/logger.dart';
 export 'src/api/Logs/severity.dart';
-export 'src/api/Logs/readable_log_record.dart';
 export 'src/api/Logs/logg_tracer.dart';
+

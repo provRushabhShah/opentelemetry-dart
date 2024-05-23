@@ -4,7 +4,7 @@
 @TestOn('vm')
 import 'package:mocktail/mocktail.dart';
 import 'package:opentelemetry/sdk.dart' as sdk;
-import 'package:opentelemetry/src/api/Logs/readable_log_record.dart';
+import 'package:opentelemetry/src/sdk/Logs/readable_log_record.dart';
 import 'package:test/test.dart';
 
 

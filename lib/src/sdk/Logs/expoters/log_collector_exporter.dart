@@ -16,6 +16,7 @@ as pb_resource;
 import '../../proto/opentelemetry/proto/logs/v1/logs.pb.dart' as pb_logs;
 import '../../proto/opentelemetry/proto/logs/v1/logs.pbenum.dart' as pg_logs_enum;
 
+import 'dart:typed_data';
 
 class LogCollectorExporter implements sdk.LogRecordExporter {
   final Logger _log = Logger('opentelemetry.CollectorExporter');
@@ -24,13 +25,16 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
   final http.Client client;
   final Map<String, String> headers;
   var _isShutdown = false;
+  final batchSize;
+  final batchFreqInSecond;
+
 
   LogCollectorExporter(this.uri,
-      {http.Client? httpClient, this.headers = const {}})
+      {http.Client? httpClient, this.headers = const {}, this.batchSize = 2, this.batchFreqInSecond = 50})
       : client = httpClient ?? http.Client();
 
   @override
-  void export(List<api.ReadableLogRecord> logRecords) {
+  void export(List<sdk.ReadableLogRecord> logRecords) {
     if (_isShutdown) {
       return;
     }
@@ -44,11 +48,12 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
 
   Future<void> _send(
       Uri uri,
-      List<api.ReadableLogRecord> logRecords,
+      List<sdk.ReadableLogRecord> logRecords,
       ) async {
     try {
       final body = pb_logs_service.ExportLogsServiceRequest(
           resourceLogs: _logsToProtobuf(logRecords));
+      generateProtoBufObject(logRecords);
 
       // final headers = {'Content-Type': 'application/json'}
       //   ..addAll(this.headers);
@@ -63,6 +68,21 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
       _log.warning('Failed to export ${logRecords.length} spans.', e);
     }
   }
+
+ String generateProtoBufObject(List<sdk.ReadableLogRecord> logRecords){
+    final buffers = pb_logs_service.ExportLogsServiceRequest(resourceLogs: _logsToProtobuf(logRecords));
+
+    Uint8List serializedMessage = buffers.writeToBuffer();
+    String s = new String.fromCharCodes(serializedMessage);
+    var outputAsUint8List = new Uint8List.fromList(s.codeUnits);
+
+    return s;
+      // final log = Logsdb(1, serializedMessage, "time");
+
+
+
+  }
+
   @override
   void forceFlush() {
 
@@ -79,7 +99,7 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
   /// Spans are grouped by a trace provider's [sdk.Resource] and a tracer's
   /// [sdk.InstrumentationScope].
   Iterable<pb_logs.ResourceLogs> _logsToProtobuf(
-      List<api.ReadableLogRecord> logRecords) {
+      List<sdk.ReadableLogRecord> logRecords) {
     // use a map of maps to group spans by resource and instrumentation library
     final rsm =
     <sdk.Resource, Map<sdk.InstrumentationScope, List<pb_logs.LogRecord>>>{};
@@ -120,7 +140,7 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
     return rss;
   }
 
-  pb_logs.LogRecord _spanToProtobuf(api.ReadableLogRecord log) {
+  pb_logs.LogRecord _spanToProtobuf(sdk.ReadableLogRecord log) {
 
     return pb_logs.LogRecord(
         timeUnixNano: sdk.DateTimeTimeProvider().getInt64Time(log.recordTime) ,
@@ -194,6 +214,22 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
         }
     }
     return pb_common.AnyValue();
+  }
+
+  @override
+  exportProtoBuf(List<Uint8List> protoBufU8,Function() onSuccess, Function() onFail  ) async {
+
+    try {
+
+      final headers = {'Content-Type': 'application/x-protobuf'}
+        ..addAll(this.headers);
+
+      await client.post(uri, body: protoBufU8, headers: headers);
+      onSuccess();
+    } catch (e) {
+      onFail();
+      _log.warning('Failed to export  spans.', e);
+    }
   }
 
 

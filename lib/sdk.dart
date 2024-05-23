@@ -36,3 +36,6 @@ export 'src/sdk/Logs/expoters/simple_log_record_processor.dart';
 export 'src/sdk/Logs/logger_provider.dart';
 export 'src/sdk/Logs/log_limits.dart';
 export 'src/sdk/Logs/logg.dart';
+export 'src/sdk/Logs/readable_log_record.dart';
+
+export 'src/sdk/resource/resource.dart';

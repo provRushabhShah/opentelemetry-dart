@@ -10,7 +10,7 @@ import '../common/limits.dart' show applyAttributeLimitsForLog;
 
 /// A representation of a single operation within a trace.
 
-class Logg implements api.ReadableLogRecord{
+class Logg implements sdk.ReadableLogRecord{
   final api.SpanContext _spanContext;
   final api.SpanId _parentSpanId;
   final List<sdk.LogRecordProcessor> _processors;
@@ -77,6 +77,7 @@ class Logg implements api.ReadableLogRecord{
 
   @override
   void setAttribute(api.Attribute attribute) {
+
     //Don't want to have any attribute
     if (_limits.maxAttributeCount == 0) {
       _droppedSpanAttributes++;
@@ -116,10 +117,10 @@ class Logg implements api.ReadableLogRecord{
     this.severity = severity;
   }
   @override
-  void emit() {
+  void emit()  {
 
     for (var i = 0; i < _processors.length; i++) {
-      _processors[i].onEmit(this);
+       _processors[i].onEmit(this);
     }
   }
 

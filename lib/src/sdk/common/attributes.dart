@@ -30,4 +30,5 @@ class Attributes {
   void addAll(List<Attribute> attributes) {
     attributes.forEach(add);
   }
+
 }

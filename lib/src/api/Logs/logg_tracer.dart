@@ -1,11 +1,12 @@
 import '../../../api.dart' as api;
+import '../../../sdk.dart' as sdk;
 import 'package:fixnum/fixnum.dart';
 abstract class LogTracer {
   /// Starts a new [api.Span] without setting it as the current span in this
   /// tracer's context.
   ///
   ///
-  api.ReadableLogRecord setLog(
+  sdk.ReadableLogRecord setLog(
       DateTime? observedTimestamp,
       String name,
       {api.Context? context,
