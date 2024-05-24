@@ -37,5 +37,6 @@ export 'src/sdk/Logs/logger_provider.dart';
 export 'src/sdk/Logs/log_limits.dart';
 export 'src/sdk/Logs/logg.dart';
 export 'src/sdk/Logs/readable_log_record.dart';
+export 'src/api/context/context.dart' show Context;
 
 export 'src/sdk/resource/resource.dart';

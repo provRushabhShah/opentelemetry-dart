@@ -5,23 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2c31f502-d1a8-49ab-8bb5-69fecb09dfe2" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/src/sdk/Logs/expoters/log_batch_processor.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/api.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/api.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/sdk.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/sdk.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/api/Logs/logg_tracer.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/api/Logs/logg_tracer.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/api/Logs/readable_log_record.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/sdk/Logs/readable_log_record.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/sdk/Logs/expoters/log_collector_exporter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/sdk/Logs/expoters/log_collector_exporter.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/sdk/Logs/expoters/log_record_expoter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/sdk/Logs/expoters/log_record_expoter.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/sdk/Logs/expoters/log_record_processor.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/sdk/Logs/expoters/log_record_processor.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/sdk/Logs/expoters/simple_log_record_processor.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/sdk/Logs/expoters/simple_log_record_processor.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/sdk/Logs/logg.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/sdk/Logs/logg.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/src/sdk/common/attributes.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/sdk/common/attributes.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/sdk/proto/opentelemetry-proto" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/sdk/proto/opentelemetry-proto" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/src/sdk/proto/opentelemetry-proto/opentelemetry/proto/resource/v1/resource.proto" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/sdk/proto/opentelemetry-proto/opentelemetry/proto/resource/v1/resource.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/unit/mocks.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/unit/mocks.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/unit/sdk/Logs/log_processor_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/unit/sdk/Logs/log_processor_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/sdk/trace/exporters/collector_exporter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/sdk/trace/exporters/collector_exporter.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/sdk/trace/exporters/console_exporter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/sdk/trace/exporters/console_exporter.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/src/sdk/trace/exporters/span_exporter.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/src/sdk/trace/exporters/span_exporter.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,6 +54,8 @@
       <recent name="$PROJECT_DIR$/lib/src/sdk" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib/src/api" />
+      <recent name="$PROJECT_DIR$/lib/src/sdk" />
       <recent name="$PROJECT_DIR$/lib/src/sdk/Logs" />
     </key>
   </component>
@@ -126,7 +119,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/lib/src/sdk/Logs/expoters/log_collector_exporter.dart</url>
-          <line>87</line>
+          <line>82</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
@@ -141,17 +134,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/lib/src/sdk/Logs/expoters/log_collector_exporter.dart</url>
-          <line>93</line>
+          <line>88</line>
           <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/lib/src/sdk/trace/exporters/collector_exporter.dart</url>
-          <line>239</line>
+          <line>251</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/lib/src/sdk/trace/exporters/collector_exporter.dart</url>
-          <line>240</line>
+          <line>252</line>
           <option name="timeStamp" value="12" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
@@ -161,18 +154,8 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="Dart">
           <url>file://$PROJECT_DIR$/lib/src/sdk/trace/exporters/collector_exporter.dart</url>
-          <line>48</line>
+          <line>51</line>
           <option name="timeStamp" value="22" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/lib/src/sdk/Logs/expoters/log_collector_exporter.dart</url>
-          <line>81</line>
-          <option name="timeStamp" value="23" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="Dart">
-          <url>file://$PROJECT_DIR$/lib/src/sdk/Logs/expoters/log_collector_exporter.dart</url>
-          <line>55</line>
-          <option name="timeStamp" value="24" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

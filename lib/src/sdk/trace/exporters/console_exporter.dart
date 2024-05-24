@@ -1,7 +1,11 @@
 // Copyright 2021-2022 Workiva.
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
+import 'dart:typed_data';
+
 import '../../../../sdk.dart' as sdk;
+import 'dart:typed_data';
+
 
 class ConsoleExporter implements sdk.SpanExporter {
   var _isShutdown = false;
@@ -41,5 +45,11 @@ class ConsoleExporter implements sdk.SpanExporter {
   @override
   void shutdown() {
     _isShutdown = true;
+  }
+
+  @override
+  exportProtoBuf(List<Uint8List> protoBufU8, void Function() onSuccess, void Function() onFail) {
+    // TODO: implement exportProtoBuf
+    throw UnimplementedError();
   }
 }

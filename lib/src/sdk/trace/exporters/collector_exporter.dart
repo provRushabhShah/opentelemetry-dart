@@ -15,6 +15,7 @@ import '../../proto/opentelemetry/proto/common/v1/common.pb.dart' as pb_common;
 import '../../proto/opentelemetry/proto/resource/v1/resource.pb.dart'
     as pb_resource;
 import '../../proto/opentelemetry/proto/trace/v1/trace.pb.dart' as pb_trace;
+import 'dart:typed_data';
 
 class CollectorExporter implements sdk.SpanExporter {
   final Logger _log = Logger('opentelemetry.CollectorExporter');
@@ -23,9 +24,11 @@ class CollectorExporter implements sdk.SpanExporter {
   final http.Client client;
   final Map<String, String> headers;
   var _isShutdown = false;
+  final batchSize;
+  final batchFreqInSecond;
 
   CollectorExporter(this.uri,
-      {http.Client? httpClient, this.headers = const {}})
+      {http.Client? httpClient, this.headers = const {},this.batchSize = 2, this.batchFreqInSecond = 50})
       : client = httpClient ?? http.Client();
 
   @override
@@ -55,6 +58,15 @@ class CollectorExporter implements sdk.SpanExporter {
     } catch (e) {
       _log.warning('Failed to export ${spans.length} spans.', e);
     }
+  }
+  String generateProtoBufObject(List<sdk.ReadOnlySpan> spans){
+    final buffers = pb_trace_service.ExportTraceServiceRequest(resourceSpans: _spansToProtobuf(spans));
+
+    Uint8List serializedMessage = buffers.writeToBuffer();
+    String s = new String.fromCharCodes(serializedMessage);
+    var outputAsUint8List = new Uint8List.fromList(s.codeUnits);
+
+    return s;
   }
 
   /// Group and construct the protobuf equivalent of the given list of [api.Span]s.
@@ -239,5 +251,20 @@ class CollectorExporter implements sdk.SpanExporter {
   void shutdown() {
     _isShutdown = true;
     client.close();
+  }
+
+  @override
+  exportProtoBuf(List<Uint8List> protoBufU8, void Function() onSuccess, void Function() onFail) async{
+    try {
+
+      final headers = {'Content-Type': 'application/x-protobuf'}
+        ..addAll(this.headers);
+
+      await client.post(uri, body: protoBufU8, headers: headers);
+      onSuccess();
+    } catch (e) {
+      onFail();
+      _log.warning('Failed to export  spans.', e);
+    }
   }
 }

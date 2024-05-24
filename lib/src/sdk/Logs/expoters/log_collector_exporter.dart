@@ -53,7 +53,6 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
     try {
       final body = pb_logs_service.ExportLogsServiceRequest(
           resourceLogs: _logsToProtobuf(logRecords));
-      generateProtoBufObject(logRecords);
 
       // final headers = {'Content-Type': 'application/json'}
       //   ..addAll(this.headers);
@@ -77,10 +76,6 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
     var outputAsUint8List = new Uint8List.fromList(s.codeUnits);
 
     return s;
-      // final log = Logsdb(1, serializedMessage, "time");
-
-
-
   }
 
   @override
@@ -218,9 +213,7 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
 
   @override
   exportProtoBuf(List<Uint8List> protoBufU8,Function() onSuccess, Function() onFail  ) async {
-
     try {
-
       final headers = {'Content-Type': 'application/x-protobuf'}
         ..addAll(this.headers);
 
@@ -231,6 +224,5 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
       _log.warning('Failed to export  spans.', e);
     }
   }
-
 
 }
