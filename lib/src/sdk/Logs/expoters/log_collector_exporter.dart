@@ -54,14 +54,12 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
       final body = pb_logs_service.ExportLogsServiceRequest(
           resourceLogs: _logsToProtobuf(logRecords));
 
-      // final headers = {'Content-Type': 'application/json'}
-      //   ..addAll(this.headers);
-      // final json = jsonEncode(logRecords);
-      final headers = {'Content-Type': 'application/x-protobuf'}
+      final headers = {'Content-Type': 'application/json'}
         ..addAll(this.headers);
-
-      await client.post(uri, body: body.writeToBuffer(), headers: headers);
-
+      final bodyJson = body.writeToJson();
+      final response =   await client.post(uri, body: bodyJson, headers: headers);
+      print(response.body);
+      print(response.statusCode);
     } catch (e) {
 
       _log.warning('Failed to export ${logRecords.length} spans.', e);
@@ -71,11 +69,8 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
  String generateProtoBufObject(List<sdk.ReadableLogRecord> logRecords){
     final buffers = pb_logs_service.ExportLogsServiceRequest(resourceLogs: _logsToProtobuf(logRecords));
 
-    Uint8List serializedMessage = buffers.writeToBuffer();
-    String s = new String.fromCharCodes(serializedMessage);
-    var outputAsUint8List = new Uint8List.fromList(s.codeUnits);
+    return buffers.writeToJson();
 
-    return s;
   }
 
   @override
@@ -106,7 +101,6 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
       il[logRecord.instrumentationScope] =
           il[logRecord.instrumentationScope] ?? <pb_logs.LogRecord>[]
             ..add(_spanToProtobuf(logRecord));
-      print("il = ${il}");
       rsm[logRecord.resource] = il;
     }
 
@@ -212,17 +206,18 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
   }
 
   @override
-  exportProtoBuf(List<Uint8List> protoBufU8,Function() onSuccess, Function() onFail  ) async {
+  exportjsonString(List<String> jsonString,Function() onSuccess, Function() onFail  ) async {
     try {
-      final headers = {'Content-Type': 'application/x-protobuf'}
+      final headers = {'Content-Type': 'application/x-json'}
         ..addAll(this.headers);
-
-      await client.post(uri, body: protoBufU8, headers: headers);
+      final jsonList = jsonEncode(jsonString);
+      final response =   await client.post(uri, body: jsonList, headers: headers);
+      print(response.body);
+      print(response.statusCode);
       onSuccess();
     } catch (e) {
       onFail();
-      _log.warning('Failed to export  spans.', e);
+      _log.warning('Failed to export  Logs.', e);
     }
   }
-
 }

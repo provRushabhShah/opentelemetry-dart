@@ -10,7 +10,7 @@ abstract class LogRecordExporter {
   export(List<ReadableLogRecord> logRecords);
   void shutdown();
   forceFlush();
-  exportProtoBuf(List<Uint8List> protoBufU8, void Function() onSuccess,void Function() onFail  );
+  exportjsonString(List<String>  jsonString, void Function() onSuccess,void Function() onFail  );
 
 
   }
