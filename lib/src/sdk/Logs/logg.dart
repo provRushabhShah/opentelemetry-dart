@@ -95,6 +95,7 @@ class Logg implements sdk.ReadableLogRecord{
   }
   @override
   set observedTimestamp(DateTime? _observedTimestamp) {
+    this.observedTimestamp = _observedTimestamp;
     // TODO: implement observedTimestamp
   }
 

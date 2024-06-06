@@ -25,12 +25,11 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
   final http.Client client;
   final Map<String, String> headers;
   var _isShutdown = false;
-  final batchSize;
-  final batchFreqInSecond;
+
 
 
   LogCollectorExporter(this.uri,
-      {http.Client? httpClient, this.headers = const {}, this.batchSize = 2, this.batchFreqInSecond = 50})
+      {http.Client? httpClient, this.headers = const {}})
       : client = httpClient ?? http.Client();
 
   @override
@@ -58,19 +57,15 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
         ..addAll(this.headers);
       final bodyJson = body.writeToJson();
       final response =   await client.post(uri, body: bodyJson, headers: headers);
-      print(response.body);
-      print(response.statusCode);
     } catch (e) {
 
       _log.warning('Failed to export ${logRecords.length} spans.', e);
     }
   }
 
- String generateProtoBufObject(List<sdk.ReadableLogRecord> logRecords){
+ String generatejsonObject(List<sdk.ReadableLogRecord> logRecords){
     final buffers = pb_logs_service.ExportLogsServiceRequest(resourceLogs: _logsToProtobuf(logRecords));
-
     return buffers.writeToJson();
-
   }
 
   @override
@@ -96,7 +91,6 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
     for (final logRecord in logRecords) {
       final il = rsm[logRecord.resource] ??
           <sdk.InstrumentationScope, List<pb_logs.LogRecord>>{};
-      print(il);
 
       il[logRecord.instrumentationScope] =
           il[logRecord.instrumentationScope] ?? <pb_logs.LogRecord>[]
@@ -130,6 +124,7 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
   }
 
   pb_logs.LogRecord _spanToProtobuf(sdk.ReadableLogRecord log) {
+
 
     return pb_logs.LogRecord(
         timeUnixNano: sdk.DateTimeTimeProvider().getInt64Time(log.recordTime) ,
@@ -206,18 +201,17 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
   }
 
   @override
-  exportjsonString(List<String> jsonString,Function() onSuccess, Function() onFail  ) async {
+  exportjsonString(List<String> jsonStringArray,Function() onSuccess, Function() onFail  ) async {
     try {
-      final headers = {'Content-Type': 'application/x-json'}
+      final headers = {'Content-Type': 'application/json'}
         ..addAll(this.headers);
-      final jsonList = jsonEncode(jsonString);
-      final response =   await client.post(uri, body: jsonList, headers: headers);
-      print(response.body);
-      print(response.statusCode);
+      String jsonString = jsonEncode(jsonStringArray);
+      final response =   await client.post(uri, body: jsonStringArray.first, headers: headers);
       onSuccess();
     } catch (e) {
       onFail();
       _log.warning('Failed to export  Logs.', e);
     }
   }
+
 }

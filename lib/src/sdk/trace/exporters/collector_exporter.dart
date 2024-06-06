@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:fixnum/fixnum.dart';
 import 'package:http/http.dart' as http;
@@ -24,11 +25,10 @@ class CollectorExporter implements sdk.SpanExporter {
   final http.Client client;
   final Map<String, String> headers;
   var _isShutdown = false;
-  final batchSize;
-  final batchFreqInSecond;
+
 
   CollectorExporter(this.uri,
-      {http.Client? httpClient, this.headers = const {},this.batchSize = 2, this.batchFreqInSecond = 50})
+      {http.Client? httpClient, this.headers = const {}})
       : client = httpClient ?? http.Client();
 
   @override
@@ -59,14 +59,11 @@ class CollectorExporter implements sdk.SpanExporter {
       _log.warning('Failed to export ${spans.length} spans.', e);
     }
   }
-  String generateProtoBufObject(List<sdk.ReadOnlySpan> spans){
+  String generatejsonObject(List<sdk.ReadOnlySpan> spans){
     final buffers = pb_trace_service.ExportTraceServiceRequest(resourceSpans: _spansToProtobuf(spans));
 
-    Uint8List serializedMessage = buffers.writeToBuffer();
-    String s = new String.fromCharCodes(serializedMessage);
-    var outputAsUint8List = new Uint8List.fromList(s.codeUnits);
+    return buffers.writeToJson();
 
-    return s;
   }
 
   /// Group and construct the protobuf equivalent of the given list of [api.Span]s.
@@ -254,17 +251,20 @@ class CollectorExporter implements sdk.SpanExporter {
   }
 
   @override
-  exportProtoBuf(List<Uint8List> protoBufU8, void Function() onSuccess, void Function() onFail) async{
+  exportjsonString(List<String> jsonStringArray,Function() onSuccess, Function() onFail  ) async {
     try {
-
-      final headers = {'Content-Type': 'application/x-protobuf'}
+      final headers = {'Content-Type': 'application/json'}
         ..addAll(this.headers);
+      print("json string = ${jsonStringArray}");
+      String jsonString = jsonEncode(jsonStringArray);
 
-      await client.post(uri, body: protoBufU8, headers: headers);
+      final response =   await client.post(uri, body: jsonStringArray.first, headers: headers);
+      print(response.body);
+      print(response.statusCode);
       onSuccess();
     } catch (e) {
       onFail();
-      _log.warning('Failed to export  spans.', e);
+      _log.warning('Failed to export  Span.', e);
     }
   }
 }

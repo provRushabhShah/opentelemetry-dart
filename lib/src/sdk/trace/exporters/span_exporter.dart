@@ -12,6 +12,5 @@ abstract class SpanExporter {
 
   void shutdown();
 
-  exportProtoBuf(List<Uint8List> protoBufU8, void Function() onSuccess,void Function() onFail  );
-
+  exportjsonString(List<String> jsonString,Function() onSuccess, Function() onFail  ) ;
 }

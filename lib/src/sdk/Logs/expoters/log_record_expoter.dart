@@ -11,8 +11,6 @@ abstract class LogRecordExporter {
   void shutdown();
   forceFlush();
   exportjsonString(List<String>  jsonString, void Function() onSuccess,void Function() onFail  );
-
-
   }
 
 extension LogRecordExporterExtension on LogRecordExporter {

@@ -13,6 +13,8 @@ export 'src/api/open_telemetry.dart'
         globalTracerProvider,
         registerGlobalTextMapPropagator,
         registerGlobalTracerProvider,
+        registerGlobalLogProvider,
+        globalLogProvider,
         trace,
         traceSync;
 export 'src/api/propagation/extractors/text_map_getter.dart' show TextMapGetter;

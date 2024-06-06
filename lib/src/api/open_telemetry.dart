@@ -17,6 +17,10 @@ api.TracerProvider get globalTracerProvider => _tracerProvider;
 
 api.TextMapPropagator get globalTextMapPropagator => _textMapPropagator;
 
+api.LoggerProvider? _loggerProvider;
+api.LoggerProvider? get globalLogProvider => _loggerProvider;
+
+
 void registerGlobalTracerProvider(api.TracerProvider tracerProvider) {
   if (_tracerProvider != _noopTracerProvider) {
     throw StateError('A global TracerProvider has already been created. '
@@ -25,6 +29,16 @@ void registerGlobalTracerProvider(api.TracerProvider tracerProvider) {
   }
 
   _tracerProvider = tracerProvider;
+}
+
+void registerGlobalLogProvider(api.LoggerProvider logProvider) {
+  if (_loggerProvider != null) {
+    throw StateError('A global LogProvider has already been created. '
+        'registerGlobalLogProvider must be called only once before any '
+        'calls to the getter globalLogProvider.');
+  }
+
+  _loggerProvider = logProvider;
 }
 
 void registerGlobalTextMapPropagator(api.TextMapPropagator textMapPropagator) {

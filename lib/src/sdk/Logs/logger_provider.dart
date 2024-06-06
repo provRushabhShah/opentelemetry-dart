@@ -46,14 +46,15 @@ class LoggerTraceProviderBase implements api.LoggerProvider{
     this.sampler = const sdk.ParentBasedSampler(sdk.AlwaysOnSampler())
   }): resource = resource ?? sdk.Resource([]);
   @override
-  api.LogTracer getLogger(String name,String version , String schemaUrl , List<api.Attribute> attributes) {
-    // TODO: implement getLogger
-
-    return LoggTracer(processors, resource, sdk.DateTimeTimeProvider(),
+  api.LogTracer getLogger(String name,{String version = '' , String schemaUrl = '' , List<api.Attribute> attributes = const []}) {
+    final key = '$name@$version';
+    return tracers.putIfAbsent(
+        key,
+    () => LoggTracer(processors, resource, sdk.DateTimeTimeProvider(),
         sdk.InstrumentationScope(name, version, schemaUrl, attributes),
         idGenerator,
         sampler,
-        logLimits);
+        logLimits));
 
   }
 }

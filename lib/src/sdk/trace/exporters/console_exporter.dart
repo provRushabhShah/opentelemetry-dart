@@ -48,8 +48,7 @@ class ConsoleExporter implements sdk.SpanExporter {
   }
 
   @override
-  exportProtoBuf(List<Uint8List> protoBufU8, void Function() onSuccess, void Function() onFail) {
-    // TODO: implement exportProtoBuf
+  exportjsonString(List<String> jsonString,Function() onSuccess, Function() onFail  ) async {
     throw UnimplementedError();
   }
-}
+  }

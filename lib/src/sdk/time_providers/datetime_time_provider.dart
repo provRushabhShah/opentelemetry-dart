@@ -12,7 +12,7 @@ class DateTimeTimeProvider implements TimeProvider {
       TimeProvider.nanosecondsPerMicrosecond;
 
   Int64? getInt64Time(DateTime dateTime){
-    Int64(dateTime.microsecondsSinceEpoch) *
+    return Int64(dateTime.microsecondsSinceEpoch) *
         TimeProvider.nanosecondsPerMicrosecond;
   }
 }

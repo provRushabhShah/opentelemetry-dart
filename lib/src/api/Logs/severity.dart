@@ -2,6 +2,7 @@
 import 'dart:ffi';
 
 enum Severity {
+  unspecified,
   trace,
   trace2,
   trace3,
@@ -31,6 +32,8 @@ enum Severity {
 extension SeverityDescription on Severity {
   String get description {
     switch (this) {
+      case Severity.unspecified:
+        return "UNSPECIFIED";
       case Severity.trace:
         return "TRACE";
       case Severity.trace2:
