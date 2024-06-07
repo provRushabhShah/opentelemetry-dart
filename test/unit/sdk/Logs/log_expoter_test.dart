@@ -4,6 +4,8 @@
 @TestOn('vm')
 import 'dart:ffi';
 import 'dart:typed_data';
+import 'dart:convert';
+
 
 import 'package:mocktail/mocktail.dart';
 import 'package:logging/logging.dart';
@@ -35,7 +37,15 @@ void main() {
   late MockHttpClient mockClient;
   final uri =
   Uri.parse('https://h.wdesk.org/s/opentelemetry-collector/v1/traces');
-
+  String getHexString(List<int> _id){
+    final bytes = _id;
+    final buffer = StringBuffer();
+    for (var byte in bytes) {
+      buffer.write(byte.toRadixString(16).padLeft(2, '0'));
+    }
+    final hex64 = buffer.toString();
+    return hex64;
+  }
   setUp(() {
     mockClient = MockHttpClient();
   });
@@ -100,8 +110,8 @@ void main() {
                                         attributes: [ pb_common.KeyValue(
                                                      key: 'foo',
                                                       value: pb_common.AnyValue(stringValue: 'bar'))],
-                                        traceId : [1, 2, 3],
-                                        spanId : [10, 11, 12],
+                                        traceId : getHexString([1, 2, 3]),
+                                        spanId : getHexString([10, 11, 12]),
                                         body: pb_common.AnyValue(stringValue: 'body'),
                                         observedTimeUnixNano: sdk.DateTimeTimeProvider().getInt64Time(log1.observedTimestamp),
     ),pb_logs.LogRecord(
@@ -110,8 +120,8 @@ void main() {
     attributes: [ pb_common.KeyValue(
     key: 'foo',
     value: pb_common.AnyValue(stringValue: 'bar'))],
-    traceId : [1, 2, 3],
-    spanId : [10, 11, 12], body: pb_common.AnyValue(stringValue: 'body'),
+    traceId : getHexString([1, 2, 3]),
+    spanId : getHexString([10, 11, 12]), body: pb_common.AnyValue(stringValue: 'body'),
 
                           observedTimeUnixNano: sdk.DateTimeTimeProvider().getInt64Time(log2.observedTimestamp),
     )],
@@ -124,77 +134,76 @@ void main() {
     print("severity index = ${ pg_logs_enum.SeverityNumber.valueOf(log1.severity!.index )}");
     final verifyResult = verify(() => mockClient.post(uri,
         body: captureAny(named: 'body'),
-        headers: {'Content-Type': 'application/x-protobuf'}))
+        headers: {'Content-Type': 'application/json'}))
       ..called(1);
-    final captured = verifyResult.captured;
-
-    final traceRequest = pb_log_service.ExportLogsServiceRequest.fromBuffer(
-        captured[0] as Uint8List);
-    expect(traceRequest, equals(expected));
+    final captured = verifyResult.captured[0] as String;
+    final expectedJson = expected.toProto3Json() as Map<String,dynamic>;
+    final expectedJsonString = jsonEncode(expectedJson);
+    expect(captured, equals(expectedJsonString));
 
   });
-  // test('does not send log when shutdown', () {
-  //
-  //   final logLimit = sdk.LogLimits(maxAttributeCount: 10);
-  //
-  //   final log1 = sdk.Logg(DateTime.now(),
-  //       DateTime.now(),
-  //       "log1",
-  //       api.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([10, 11, 12]),
-  //           api.TraceFlags.none, api.TraceState.empty()),
-  //       api.SpanId([4, 5, 6]),
-  //       [],
-  //       sdk.DateTimeTimeProvider(),
-  //       sdk.Resource([]),
-  //       sdk.InstrumentationScope(
-  //           'library_name', 'library_version', 'url://schema', []),
-  //       logLimit)
-  //   ..emit();
-  //
-  //   sdk.LogCollectorExporter(uri, httpClient: mockClient)
-  //     ..shutdown()
-  //     ..export([log1]);
-  //
-  //   verify(() => mockClient.close()).called(1);
-  //   verifyNever(() => mockClient.post(uri,
-  //       body: anything, headers: {'Content-Type': 'application/x-protobuf'}));
-  // });
-  // test('supplies HTTP headers', () {
-  //   final resource =
-  //   sdk.Resource([api.Attribute.fromString('service.name', 'bar')]);
-  //   final instrumentationLibrary = sdk.InstrumentationScope(
-  //       'library_name', 'library_version', 'url://schema', []);
-  //   final limits = sdk.SpanLimits(maxNumAttributeLength: 5);
-  //   final logLimit = sdk.LogLimits(maxAttributeCount: 10);
-  //   final log1 = sdk.Logg(DateTime.now(),
-  //       DateTime.now(),
-  //       "log1",
-  //       api.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([10, 11, 12]),
-  //           api.TraceFlags.none, api.TraceState.empty()),
-  //       api.SpanId([4, 5, 6]),
-  //       [],
-  //       sdk.DateTimeTimeProvider(),
-  //       resource,
-  //       instrumentationLibrary,
-  //       logLimit)
-  //     ..setAttribute(api.Attribute.fromString('foo', 'bar'))
-  //     ..setSevarity(api.Severity.debug3)
-  //     ..emit();
-  //
-  //   final suppliedHeaders = {
-  //     'header-param-key-1': 'header-param-value-1',
-  //     'header-param-key-2': 'header-param-value-2',
-  //   };
-  //   final expectedHeaders = {
-  //     'Content-Type': 'application/x-protobuf',
-  //     ...suppliedHeaders,
-  //   };
-  //
-  //   sdk.LogCollectorExporter(uri, httpClient: mockClient, headers: suppliedHeaders)
-  //       .export([log1]);
-  //
-  //   verify(() => mockClient.post(uri, body: anything, headers: expectedHeaders))
-  //       .called(1);
-  // });
+  test('does not send log when shutdown', () {
+
+    final logLimit = sdk.LogLimits(maxAttributeCount: 10);
+
+    final log1 = sdk.Logg(DateTime.now(),
+        DateTime.now(),
+        "log1",
+        api.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([10, 11, 12]),
+            api.TraceFlags.none, api.TraceState.empty()),
+        api.SpanId([4, 5, 6]),
+        [],
+        sdk.DateTimeTimeProvider(),
+        sdk.Resource([]),
+        sdk.InstrumentationScope(
+            'library_name', 'library_version', 'url://schema', []),
+        logLimit)
+    ..emit();
+
+    sdk.LogCollectorExporter(uri, httpClient: mockClient)
+      ..shutdown()
+      ..export([log1]);
+
+    verify(() => mockClient.close()).called(1);
+    verifyNever(() => mockClient.post(uri,
+        body: anything, headers: {'Content-Type': 'application/json'}));
+  });
+  test('supplies HTTP headers', () {
+    final resource =
+    sdk.Resource([api.Attribute.fromString('service.name', 'bar')]);
+    final instrumentationLibrary = sdk.InstrumentationScope(
+        'library_name', 'library_version', 'url://schema', []);
+    final limits = sdk.SpanLimits(maxNumAttributeLength: 5);
+    final logLimit = sdk.LogLimits(maxAttributeCount: 10);
+    final log1 = sdk.Logg(DateTime.now(),
+        DateTime.now(),
+        "log1",
+        api.SpanContext(api.TraceId([1, 2, 3]), api.SpanId([10, 11, 12]),
+            api.TraceFlags.none, api.TraceState.empty()),
+        api.SpanId([4, 5, 6]),
+        [],
+        sdk.DateTimeTimeProvider(),
+        resource,
+        instrumentationLibrary,
+        logLimit)
+      ..setAttribute(api.Attribute.fromString('foo', 'bar'))
+      ..setSevarity(api.Severity.debug3)
+      ..emit();
+
+    final suppliedHeaders = {
+      'header-param-key-1': 'header-param-value-1',
+      'header-param-key-2': 'header-param-value-2',
+    };
+    final expectedHeaders = {
+      'Content-Type': 'application/json',
+      ...suppliedHeaders,
+    };
+
+    sdk.LogCollectorExporter(uri, httpClient: mockClient, headers: suppliedHeaders)
+        .export([log1]);
+
+    verify(() => mockClient.post(uri, body: anything, headers: expectedHeaders))
+        .called(1);
+  });
 
 }

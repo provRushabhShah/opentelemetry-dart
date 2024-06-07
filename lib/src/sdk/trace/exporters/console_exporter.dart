@@ -48,7 +48,7 @@ class ConsoleExporter implements sdk.SpanExporter {
   }
 
   @override
-  exportjsonString(List<String> jsonString,Function() onSuccess, Function() onFail  ) async {
+  exportjsonString(String jsonString,Function() onSuccess, Function() onFail  ) async {
     throw UnimplementedError();
   }
   }

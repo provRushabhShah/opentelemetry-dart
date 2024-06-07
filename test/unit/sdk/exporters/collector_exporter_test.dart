@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
 
 @TestOn('vm')
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:mocktail/mocktail.dart';
@@ -26,7 +27,15 @@ void main() {
   late MockHttpClient mockClient;
   final uri =
       Uri.parse('https://h.wdesk.org/s/opentelemetry-collector/v1/traces');
-
+  String getHexString(List<int> _id){
+    final bytes = _id;
+    final buffer = StringBuffer();
+    for (var byte in bytes) {
+      buffer.write(byte.toRadixString(16).padLeft(2, '0'));
+    }
+    final hex64 = buffer.toString();
+    return hex64;
+  }
   setUp(() {
     mockClient = MockHttpClient();
   });
@@ -94,9 +103,9 @@ void main() {
             pb.ScopeSpans(
                 spans: [
                   pb.Span(
-                      traceId: [1, 2, 3],
-                      spanId: [7, 8, 9],
-                      parentSpanId: [4, 5, 6],
+                      traceId: getHexString([1, 2, 3]),
+                      spanId: getHexString([7, 8, 9]),
+                      parentSpanId: getHexString([4, 5, 6]),
                       name: 'foo',
                       startTimeUnixNano: span1.startTime,
                       endTimeUnixNano: span1.endTime,
@@ -110,9 +119,9 @@ void main() {
                           message: ''),
                       kind: pb.Span_SpanKind.SPAN_KIND_CLIENT),
                   pb.Span(
-                      traceId: [1, 2, 3],
-                      spanId: [10, 11, 12],
-                      parentSpanId: [4, 5, 6],
+                      traceId: getHexString([1, 2, 3]),
+                      spanId: getHexString([10, 11, 12]),
+                      parentSpanId: getHexString([4, 5, 6]),
                       name: 'baz',
                       startTimeUnixNano: span2.startTime,
                       endTimeUnixNano: span2.endTime,
@@ -140,8 +149,8 @@ void main() {
                       kind: pb.Span_SpanKind.SPAN_KIND_INTERNAL,
                       links: [
                         pb.Span_Link(
-                            traceId: [1, 2, 3],
-                            spanId: [7, 8, 9],
+                            traceId: getHexString([1, 2, 3]),
+                            spanId: getHexString([7, 8, 9]),
                             traceState: '',
                             attributes: [
                               pb_common.KeyValue(
@@ -155,16 +164,18 @@ void main() {
                     name: 'library_name', version: 'library_version'))
           ])
     ]);
+    final expectedJson = expectedBody.toProto3Json() as Map<String,dynamic>;
+    final expectedJsonString = jsonEncode(expectedJson);
 
     final verifyResult = verify(() => mockClient.post(uri,
         body: captureAny(named: 'body'),
-        headers: {'Content-Type': 'application/x-protobuf'}))
+        headers: {'Content-Type': 'application/json'}))
       ..called(1);
-    final captured = verifyResult.captured;
+    final captured = verifyResult.captured[0] as String;
 
-    final traceRequest = pb_trace_service.ExportTraceServiceRequest.fromBuffer(
-        captured[0] as Uint8List);
-    expect(traceRequest, equals(expectedBody));
+    // final traceRequest = pb_trace_service.ExportTraceServiceRequest.fromBuffer(
+    //     captured[0] as Uint8List);
+    expect(captured, equals(expectedJsonString));
   });
 
   test('shows a warning log when export failed', () {
@@ -186,7 +197,7 @@ void main() {
 
     when(() => mockClient.post(uri,
             body: any(named: 'body'),
-            headers: {'Content-Type': 'application/x-protobuf'}))
+            headers: {'Content-Type': 'application/json'}))
         .thenThrow(Exception('Failed to connect'));
 
     final records = <LogRecord>[];
@@ -196,7 +207,7 @@ void main() {
 
     verify(() => mockClient.post(uri,
         body: anything,
-        headers: {'Content-Type': 'application/x-protobuf'})).called(1);
+        headers: {'Content-Type': 'application/json'})).called(1);
 
     expect(records, hasLength(1));
     expect(records[0].level, equals(Level.WARNING));
@@ -250,7 +261,7 @@ void main() {
       'header-param-key-2': 'header-param-value-2',
     };
     final expectedHeaders = {
-      'Content-Type': 'application/x-protobuf',
+      'Content-Type': 'application/json',
       ...suppliedHeaders,
     };
 
@@ -278,11 +289,12 @@ void main() {
         sdk.DateTimeTimeProvider().now)
       ..end();
 
-    final expectedHeaders = {'Content-Type': 'application/x-protobuf'};
+    final expectedHeaders = {'Content-Type': 'application/json'};
 
     sdk.CollectorExporter(uri, httpClient: mockClient).export([span]);
 
     verify(() => mockClient.post(uri, body: anything, headers: expectedHeaders))
         .called(1);
   });
+
 }
