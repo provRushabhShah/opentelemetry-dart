@@ -256,8 +256,8 @@ class LogRecord extends $pb.GeneratedMessage {
     $core.Iterable<$0.KeyValue>? attributes,
     $core.int? droppedAttributesCount,
     $core.int? flags,
-    $core.List<$core.int>? traceId,
-    $core.List<$core.int>? spanId,
+    $core.String? traceId,
+    $core.String? spanId,
     $fixnum.Int64? observedTimeUnixNano,
   }) {
     final $result = create();
@@ -305,8 +305,8 @@ class LogRecord extends $pb.GeneratedMessage {
     ..pc<$0.KeyValue>(6, _omitFieldNames ? '' : 'attributes', $pb.PbFieldType.PM, subBuilder: $0.KeyValue.create)
     ..a<$core.int>(7, _omitFieldNames ? '' : 'droppedAttributesCount', $pb.PbFieldType.OU3)
     ..a<$core.int>(8, _omitFieldNames ? '' : 'flags', $pb.PbFieldType.OF3)
-    ..a<$core.List<$core.int>>(9, _omitFieldNames ? '' : 'traceId', $pb.PbFieldType.OY)
-    ..a<$core.List<$core.int>>(10, _omitFieldNames ? '' : 'spanId', $pb.PbFieldType.OY)
+    ..aOS(9, _omitFieldNames ? '' : 'traceId')
+    ..aOS(10, _omitFieldNames ? '' : 'spanId')
     ..a<$fixnum.Int64>(11, _omitFieldNames ? '' : 'observedTimeUnixNano', $pb.PbFieldType.OF6, defaultOrMaker: $fixnum.Int64.ZERO)
     ..hasRequiredFields = false
   ;
@@ -421,9 +421,9 @@ class LogRecord extends $pb.GeneratedMessage {
   ///    - the field is not present,
   ///    - the field contains an invalid value.
   @$pb.TagNumber(9)
-  $core.List<$core.int> get traceId => $_getN(7);
+  $core.String get traceId => $_getSZ(7);
   @$pb.TagNumber(9)
-  set traceId($core.List<$core.int> v) { $_setBytes(7, v); }
+  set traceId($core.String v) { $_setString(7, v); }
   @$pb.TagNumber(9)
   $core.bool hasTraceId() => $_has(7);
   @$pb.TagNumber(9)
@@ -442,9 +442,9 @@ class LogRecord extends $pb.GeneratedMessage {
   ///    - the field is not present,
   ///    - the field contains an invalid value.
   @$pb.TagNumber(10)
-  $core.List<$core.int> get spanId => $_getN(8);
+  $core.String get spanId => $_getSZ(8);
   @$pb.TagNumber(10)
-  set spanId($core.List<$core.int> v) { $_setBytes(8, v); }
+  set spanId($core.String v) { $_setString(8, v); }
   @$pb.TagNumber(10)
   $core.bool hasSpanId() => $_has(8);
   @$pb.TagNumber(10)

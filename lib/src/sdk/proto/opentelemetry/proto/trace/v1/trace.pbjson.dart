@@ -1,6 +1,3 @@
-// Copyright 2021-2022 Workiva.
-// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
-
 //
 //  Generated code. Do not modify.
 //  source: opentelemetry/proto/trace/v1/trace.proto
@@ -84,10 +81,10 @@ final $typed_data.Uint8List scopeSpansDescriptor = $convert.base64Decode(
 const Span$json = {
   '1': 'Span',
   '2': [
-    {'1': 'trace_id', '3': 1, '4': 1, '5': 12, '10': 'traceId'},
-    {'1': 'span_id', '3': 2, '4': 1, '5': 12, '10': 'spanId'},
+    {'1': 'trace_id', '3': 1, '4': 1, '5': 9, '10': 'traceId'},
+    {'1': 'span_id', '3': 2, '4': 1, '5': 9, '10': 'spanId'},
     {'1': 'trace_state', '3': 3, '4': 1, '5': 9, '10': 'traceState'},
-    {'1': 'parent_span_id', '3': 4, '4': 1, '5': 12, '10': 'parentSpanId'},
+    {'1': 'parent_span_id', '3': 4, '4': 1, '5': 9, '10': 'parentSpanId'},
     {'1': 'flags', '3': 16, '4': 1, '5': 7, '10': 'flags'},
     {'1': 'name', '3': 5, '4': 1, '5': 9, '10': 'name'},
     {'1': 'kind', '3': 6, '4': 1, '5': 14, '6': '.opentelemetry.proto.trace.v1.Span.SpanKind', '10': 'kind'},
@@ -120,8 +117,8 @@ const Span_Event$json = {
 const Span_Link$json = {
   '1': 'Link',
   '2': [
-    {'1': 'trace_id', '3': 1, '4': 1, '5': 12, '10': 'traceId'},
-    {'1': 'span_id', '3': 2, '4': 1, '5': 12, '10': 'spanId'},
+    {'1': 'trace_id', '3': 1, '4': 1, '5': 9, '10': 'traceId'},
+    {'1': 'span_id', '3': 2, '4': 1, '5': 9, '10': 'spanId'},
     {'1': 'trace_state', '3': 3, '4': 1, '5': 9, '10': 'traceState'},
     {'1': 'attributes', '3': 4, '4': 3, '5': 11, '6': '.opentelemetry.proto.common.v1.KeyValue', '10': 'attributes'},
     {'1': 'dropped_attributes_count', '3': 5, '4': 1, '5': 13, '10': 'droppedAttributesCount'},
@@ -144,9 +141,9 @@ const Span_SpanKind$json = {
 
 /// Descriptor for `Span`. Decode as a `google.protobuf.DescriptorProto`.
 final $typed_data.Uint8List spanDescriptor = $convert.base64Decode(
-    'CgRTcGFuEhkKCHRyYWNlX2lkGAEgASgMUgd0cmFjZUlkEhcKB3NwYW5faWQYAiABKAxSBnNwYW'
+    'CgRTcGFuEhkKCHRyYWNlX2lkGAEgASgJUgd0cmFjZUlkEhcKB3NwYW5faWQYAiABKAlSBnNwYW'
     '5JZBIfCgt0cmFjZV9zdGF0ZRgDIAEoCVIKdHJhY2VTdGF0ZRIkCg5wYXJlbnRfc3Bhbl9pZBgE'
-    'IAEoDFIMcGFyZW50U3BhbklkEhQKBWZsYWdzGBAgASgHUgVmbGFncxISCgRuYW1lGAUgASgJUg'
+    'IAEoCVIMcGFyZW50U3BhbklkEhQKBWZsYWdzGBAgASgHUgVmbGFncxISCgRuYW1lGAUgASgJUg'
     'RuYW1lEj8KBGtpbmQYBiABKA4yKy5vcGVudGVsZW1ldHJ5LnByb3RvLnRyYWNlLnYxLlNwYW4u'
     'U3BhbktpbmRSBGtpbmQSLwoUc3RhcnRfdGltZV91bml4X25hbm8YByABKAZSEXN0YXJ0VGltZV'
     'VuaXhOYW5vEisKEmVuZF90aW1lX3VuaXhfbmFubxgIIAEoBlIPZW5kVGltZVVuaXhOYW5vEkcK'
@@ -161,8 +158,8 @@ final $typed_data.Uint8List spanDescriptor = $convert.base64Decode(
     'bxgBIAEoBlIMdGltZVVuaXhOYW5vEhIKBG5hbWUYAiABKAlSBG5hbWUSRwoKYXR0cmlidXRlcx'
     'gDIAMoCzInLm9wZW50ZWxlbWV0cnkucHJvdG8uY29tbW9uLnYxLktleVZhbHVlUgphdHRyaWJ1'
     'dGVzEjgKGGRyb3BwZWRfYXR0cmlidXRlc19jb3VudBgEIAEoDVIWZHJvcHBlZEF0dHJpYnV0ZX'
-    'NDb3VudBr0AQoETGluaxIZCgh0cmFjZV9pZBgBIAEoDFIHdHJhY2VJZBIXCgdzcGFuX2lkGAIg'
-    'ASgMUgZzcGFuSWQSHwoLdHJhY2Vfc3RhdGUYAyABKAlSCnRyYWNlU3RhdGUSRwoKYXR0cmlidX'
+    'NDb3VudBr0AQoETGluaxIZCgh0cmFjZV9pZBgBIAEoCVIHdHJhY2VJZBIXCgdzcGFuX2lkGAIg'
+    'ASgJUgZzcGFuSWQSHwoLdHJhY2Vfc3RhdGUYAyABKAlSCnRyYWNlU3RhdGUSRwoKYXR0cmlidX'
     'RlcxgEIAMoCzInLm9wZW50ZWxlbWV0cnkucHJvdG8uY29tbW9uLnYxLktleVZhbHVlUgphdHRy'
     'aWJ1dGVzEjgKGGRyb3BwZWRfYXR0cmlidXRlc19jb3VudBgFIAEoDVIWZHJvcHBlZEF0dHJpYn'
     'V0ZXNDb3VudBIUCgVmbGFncxgGIAEoB1IFZmxhZ3MimQEKCFNwYW5LaW5kEhkKFVNQQU5fS0lO'

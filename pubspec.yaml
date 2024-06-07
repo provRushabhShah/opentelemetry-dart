@@ -13,13 +13,12 @@ dependencies:
   logging: ^1.0.0
   meta: '>=1.6.0 <2.0.0'
   quiver: '>=3.0.0 <4.0.0'
-  realm: ^2.0.0
   protobuf: ">=2.0.0 <4.0.0"
 
 
-dependency_overrides:
-  protobuf:
-    path: ../protobuf-3.1.0
+#dependency_overrides:
+#  protobuf:
+#    path: ../protobuf-3.1.0
 
 
 

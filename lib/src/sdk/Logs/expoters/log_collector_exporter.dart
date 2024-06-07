@@ -50,13 +50,14 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
       List<sdk.ReadableLogRecord> logRecords,
       ) async {
     try {
-      final body = pb_logs_service.ExportLogsServiceRequest(
+      final buffers = pb_logs_service.ExportLogsServiceRequest(
           resourceLogs: _logsToProtobuf(logRecords));
 
       final headers = {'Content-Type': 'application/json'}
         ..addAll(this.headers);
-      final bodyJson = body.writeToJson();
-      final response =   await client.post(uri, body: bodyJson, headers: headers);
+      final protoJson = buffers.toProto3Json() as Map<String,dynamic>;
+      final jsonString = jsonEncode(protoJson);
+      final response =   await client.post(uri, body: jsonString, headers: headers);
     } catch (e) {
 
       _log.warning('Failed to export ${logRecords.length} spans.', e);
@@ -65,7 +66,9 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
 
  String generatejsonObject(List<sdk.ReadableLogRecord> logRecords){
     final buffers = pb_logs_service.ExportLogsServiceRequest(resourceLogs: _logsToProtobuf(logRecords));
-    return buffers.writeToJson();
+    final protoJson = buffers.toProto3Json() as Map<String,dynamic>;
+    final jsonString = jsonEncode(protoJson);
+    return jsonString;
   }
 
   @override
@@ -133,8 +136,8 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
         attributes: log.attributes.keys.map((key) => pb_common.KeyValue(
                        key: key,
                        value: _attributeValueToProtobuf(log.attributes.get(key)!))),
-        spanId: log.spanContext.spanId.get(),
-        traceId: log.spanContext.traceId.get(),
+        spanId: log.spanContext.spanId.getHexString(),
+        traceId: log.spanContext.traceId.getHexString(),
         observedTimeUnixNano:  sdk.DateTimeTimeProvider().getInt64Time(log.observedTimestamp)
     );
 
@@ -201,12 +204,13 @@ class LogCollectorExporter implements sdk.LogRecordExporter {
   }
 
   @override
-  exportjsonString(List<String> jsonStringArray,Function() onSuccess, Function() onFail  ) async {
+  exportjsonString(String jsonString,Function() onSuccess, Function() onFail  ) async {
     try {
       final headers = {'Content-Type': 'application/json'}
         ..addAll(this.headers);
-      String jsonString = jsonEncode(jsonStringArray);
-      final response =   await client.post(uri, body: jsonStringArray.first, headers: headers);
+
+      final response =   await client.post(uri, body: jsonString, headers: headers);
+
       onSuccess();
     } catch (e) {
       onFail();

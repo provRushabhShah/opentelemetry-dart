@@ -28,6 +28,16 @@ class TraceId {
 
   /// Whether this ID represents a valid Trace.
   bool get isValid => !_id.every((i) => i == 0);
+  String getHexString(){
+    final bytes = _id;
+    final buffer = StringBuffer();
+    for (var byte in bytes) {
+      buffer.write(byte.toRadixString(16).padLeft(2, '0'));
+    }
+    final hex64 = buffer.toString();
+    return hex64;
+  }
+  //
 
   /// Retrieve this SpanId as a human-readable ID.
   @override

@@ -12,5 +12,5 @@ abstract class SpanExporter {
 
   void shutdown();
 
-  exportjsonString(List<String> jsonString,Function() onSuccess, Function() onFail  ) ;
+  exportjsonString(String jsonString,Function() onSuccess, Function() onFail  );
 }

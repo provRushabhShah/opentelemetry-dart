@@ -49,21 +49,22 @@ class CollectorExporter implements sdk.SpanExporter {
     List<sdk.ReadOnlySpan> spans,
   ) async {
     try {
-      final body = pb_trace_service.ExportTraceServiceRequest(
+      final buffers = pb_trace_service.ExportTraceServiceRequest(
           resourceSpans: _spansToProtobuf(spans));
-      final headers = {'Content-Type': 'application/x-protobuf'}
+      final headers = {'Content-Type': 'application/json'}
         ..addAll(this.headers);
-
-      await client.post(uri, body: body.writeToBuffer(), headers: headers);
+      final protoJson = buffers.toProto3Json() as Map<String,dynamic>;
+      final jsonString = jsonEncode(protoJson);
+      final response =   await client.post(uri, body: jsonString, headers: headers);
     } catch (e) {
       _log.warning('Failed to export ${spans.length} spans.', e);
     }
   }
   String generatejsonObject(List<sdk.ReadOnlySpan> spans){
     final buffers = pb_trace_service.ExportTraceServiceRequest(resourceSpans: _spansToProtobuf(spans));
-
-    return buffers.writeToJson();
-
+    final protoJson = buffers.toProto3Json() as Map<String,dynamic>;
+    final jsonString = jsonEncode(protoJson);
+    return jsonString;
   }
 
   /// Group and construct the protobuf equivalent of the given list of [api.Span]s.
@@ -117,8 +118,8 @@ class CollectorExporter implements sdk.SpanExporter {
             key: attr.key, value: _attributeValueToProtobuf(attr.value)));
       }
       pbLinks.add(pb_trace.Span_Link(
-          traceId: link.context.traceId.get(),
-          spanId: link.context.spanId.get(),
+          traceId: link.context.traceId.getHexString(),
+          spanId: link.context.spanId.getHexString(),
           traceState: link.context.traceState.toString(),
           attributes: attrs));
     }
@@ -173,9 +174,9 @@ class CollectorExporter implements sdk.SpanExporter {
     }
 
     return pb_trace.Span(
-        traceId: span.spanContext.traceId.get(),
-        spanId: span.spanContext.spanId.get(),
-        parentSpanId: span.parentSpanId.get(),
+        traceId: span.spanContext.traceId.getHexString(),
+        spanId: span.spanContext.spanId.getHexString(),
+        parentSpanId: span.parentSpanId.getHexString(),
         name: span.name,
         startTimeUnixNano: span.startTime,
         endTimeUnixNano: span.endTime,
@@ -251,16 +252,11 @@ class CollectorExporter implements sdk.SpanExporter {
   }
 
   @override
-  exportjsonString(List<String> jsonStringArray,Function() onSuccess, Function() onFail  ) async {
+  exportjsonString(String jsonString,Function() onSuccess, Function() onFail  ) async {
     try {
       final headers = {'Content-Type': 'application/json'}
         ..addAll(this.headers);
-      print("json string = ${jsonStringArray}");
-      String jsonString = jsonEncode(jsonStringArray);
-
-      final response =   await client.post(uri, body: jsonStringArray.first, headers: headers);
-      print(response.body);
-      print(response.statusCode);
+      final response =   await client.post(uri, body: jsonString, headers: headers);
       onSuccess();
     } catch (e) {
       onFail();

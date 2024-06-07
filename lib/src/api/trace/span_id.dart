@@ -27,6 +27,16 @@ class SpanId {
   /// Retrieve this SpanId as a list of byte values.
   List<int> get() => _id;
 
+  String getHexString(){
+    final bytes = _id;
+    final buffer = StringBuffer();
+    for (var byte in bytes) {
+      buffer.write(byte.toRadixString(16).padLeft(2, '0'));
+    }
+    final hex64 = buffer.toString();
+    return hex64;
+  }
+
   /// Whether this ID represents a valid [api.Span].
   bool get isValid => _id.isEmpty || !_id.every((i) => i == 0);
 

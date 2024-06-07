@@ -96,13 +96,11 @@ class Logg implements sdk.ReadableLogRecord{
   @override
   set observedTimestamp(DateTime? _observedTimestamp) {
     this.observedTimestamp = _observedTimestamp;
-    // TODO: implement observedTimestamp
   }
 
 
   @override
   set spanContext(api.SpanContext? _spanContext) {
-    // TODO: implement spanContext
   }
 
   @override

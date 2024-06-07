@@ -10,7 +10,7 @@ abstract class LogRecordExporter {
   export(List<ReadableLogRecord> logRecords);
   void shutdown();
   forceFlush();
-  exportjsonString(List<String>  jsonString, void Function() onSuccess,void Function() onFail  );
+  exportjsonString(String jsonString,Function() onSuccess, Function() onFail  );
   }
 
 extension LogRecordExporterExtension on LogRecordExporter {

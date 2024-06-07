@@ -137,8 +137,8 @@ const LogRecord$json = {
     {'1': 'attributes', '3': 6, '4': 3, '5': 11, '6': '.opentelemetry.proto.common.v1.KeyValue', '10': 'attributes'},
     {'1': 'dropped_attributes_count', '3': 7, '4': 1, '5': 13, '10': 'droppedAttributesCount'},
     {'1': 'flags', '3': 8, '4': 1, '5': 7, '10': 'flags'},
-    {'1': 'trace_id', '3': 9, '4': 1, '5': 12, '10': 'traceId'},
-    {'1': 'span_id', '3': 10, '4': 1, '5': 12, '10': 'spanId'},
+    {'1': 'trace_id', '3': 9, '4': 1, '5': 9, '10': 'traceId'},
+    {'1': 'span_id', '3': 10, '4': 1, '5': 9, '10': 'spanId'},
   ],
   '9': [
     {'1': 4, '2': 5},
@@ -155,6 +155,6 @@ final $typed_data.Uint8List logRecordDescriptor = $convert.base64Decode(
     'ZhbHVlUgRib2R5EkcKCmF0dHJpYnV0ZXMYBiADKAsyJy5vcGVudGVsZW1ldHJ5LnByb3RvLmNv'
     'bW1vbi52MS5LZXlWYWx1ZVIKYXR0cmlidXRlcxI4Chhkcm9wcGVkX2F0dHJpYnV0ZXNfY291bn'
     'QYByABKA1SFmRyb3BwZWRBdHRyaWJ1dGVzQ291bnQSFAoFZmxhZ3MYCCABKAdSBWZsYWdzEhkK'
-    'CHRyYWNlX2lkGAkgASgMUgd0cmFjZUlkEhcKB3NwYW5faWQYCiABKAxSBnNwYW5JZEoECAQQBQ'
+    'CHRyYWNlX2lkGAkgASgJUgd0cmFjZUlkEhcKB3NwYW5faWQYCiABKAlSBnNwYW5JZEoECAQQBQ'
     '==');
 

@@ -1,6 +1,3 @@
-// Copyright 2021-2022 Workiva.
-// Licensed under the Apache License, Version 2.0. Please see https://github.com/Workiva/opentelemetry-dart/blob/master/LICENSE for more information
-
 //
 //  Generated code. Do not modify.
 //  source: opentelemetry/proto/trace/v1/trace.proto
@@ -350,8 +347,8 @@ class Span_Event extends $pb.GeneratedMessage {
 /// traces or when the handler receives a request from a different project.
 class Span_Link extends $pb.GeneratedMessage {
   factory Span_Link({
-    $core.List<$core.int>? traceId,
-    $core.List<$core.int>? spanId,
+    $core.String? traceId,
+    $core.String? spanId,
     $core.String? traceState,
     $core.Iterable<$0.KeyValue>? attributes,
     $core.int? droppedAttributesCount,
@@ -383,8 +380,8 @@ class Span_Link extends $pb.GeneratedMessage {
   factory Span_Link.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Span.Link', package: const $pb.PackageName(_omitMessageNames ? '' : 'opentelemetry.proto.trace.v1'), createEmptyInstance: create)
-    ..a<$core.List<$core.int>>(1, _omitFieldNames ? '' : 'traceId', $pb.PbFieldType.OY)
-    ..a<$core.List<$core.int>>(2, _omitFieldNames ? '' : 'spanId', $pb.PbFieldType.OY)
+    ..aOS(1, _omitFieldNames ? '' : 'traceId')
+    ..aOS(2, _omitFieldNames ? '' : 'spanId')
     ..aOS(3, _omitFieldNames ? '' : 'traceState')
     ..pc<$0.KeyValue>(4, _omitFieldNames ? '' : 'attributes', $pb.PbFieldType.PM, subBuilder: $0.KeyValue.create)
     ..a<$core.int>(5, _omitFieldNames ? '' : 'droppedAttributesCount', $pb.PbFieldType.OU3)
@@ -416,9 +413,9 @@ class Span_Link extends $pb.GeneratedMessage {
   /// A unique identifier of a trace that this linked span is part of. The ID is a
   /// 16-byte array.
   @$pb.TagNumber(1)
-  $core.List<$core.int> get traceId => $_getN(0);
+  $core.String get traceId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set traceId($core.List<$core.int> v) { $_setBytes(0, v); }
+  set traceId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasTraceId() => $_has(0);
   @$pb.TagNumber(1)
@@ -426,9 +423,9 @@ class Span_Link extends $pb.GeneratedMessage {
 
   /// A unique identifier for the linked span. The ID is an 8-byte array.
   @$pb.TagNumber(2)
-  $core.List<$core.int> get spanId => $_getN(1);
+  $core.String get spanId => $_getSZ(1);
   @$pb.TagNumber(2)
-  set spanId($core.List<$core.int> v) { $_setBytes(1, v); }
+  set spanId($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasSpanId() => $_has(1);
   @$pb.TagNumber(2)
@@ -484,10 +481,10 @@ class Span_Link extends $pb.GeneratedMessage {
 ///  The next available field id is 17.
 class Span extends $pb.GeneratedMessage {
   factory Span({
-    $core.List<$core.int>? traceId,
-    $core.List<$core.int>? spanId,
+    $core.String? traceId,
+    $core.String? spanId,
     $core.String? traceState,
-    $core.List<$core.int>? parentSpanId,
+    $core.String? parentSpanId,
     $core.String? name,
     Span_SpanKind? kind,
     $fixnum.Int64? startTimeUnixNano,
@@ -557,10 +554,10 @@ class Span extends $pb.GeneratedMessage {
   factory Span.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Span', package: const $pb.PackageName(_omitMessageNames ? '' : 'opentelemetry.proto.trace.v1'), createEmptyInstance: create)
-    ..a<$core.List<$core.int>>(1, _omitFieldNames ? '' : 'traceId', $pb.PbFieldType.OY)
-    ..a<$core.List<$core.int>>(2, _omitFieldNames ? '' : 'spanId', $pb.PbFieldType.OY)
+    ..aOS(1, _omitFieldNames ? '' : 'traceId')
+    ..aOS(2, _omitFieldNames ? '' : 'spanId')
     ..aOS(3, _omitFieldNames ? '' : 'traceState')
-    ..a<$core.List<$core.int>>(4, _omitFieldNames ? '' : 'parentSpanId', $pb.PbFieldType.OY)
+    ..aOS(4, _omitFieldNames ? '' : 'parentSpanId')
     ..aOS(5, _omitFieldNames ? '' : 'name')
     ..e<Span_SpanKind>(6, _omitFieldNames ? '' : 'kind', $pb.PbFieldType.OE, defaultOrMaker: Span_SpanKind.SPAN_KIND_UNSPECIFIED, valueOf: Span_SpanKind.valueOf, enumValues: Span_SpanKind.values)
     ..a<$fixnum.Int64>(7, _omitFieldNames ? '' : 'startTimeUnixNano', $pb.PbFieldType.OF6, defaultOrMaker: $fixnum.Int64.ZERO)
@@ -604,9 +601,9 @@ class Span extends $pb.GeneratedMessage {
   ///
   ///  This field is required.
   @$pb.TagNumber(1)
-  $core.List<$core.int> get traceId => $_getN(0);
+  $core.String get traceId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set traceId($core.List<$core.int> v) { $_setBytes(0, v); }
+  set traceId($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasTraceId() => $_has(0);
   @$pb.TagNumber(1)
@@ -619,9 +616,9 @@ class Span extends $pb.GeneratedMessage {
   ///
   ///  This field is required.
   @$pb.TagNumber(2)
-  $core.List<$core.int> get spanId => $_getN(1);
+  $core.String get spanId => $_getSZ(1);
   @$pb.TagNumber(2)
-  set spanId($core.List<$core.int> v) { $_setBytes(1, v); }
+  set spanId($core.String v) { $_setString(1, v); }
   @$pb.TagNumber(2)
   $core.bool hasSpanId() => $_has(1);
   @$pb.TagNumber(2)
@@ -642,9 +639,9 @@ class Span extends $pb.GeneratedMessage {
   /// The `span_id` of this span's parent span. If this is a root span, then this
   /// field must be empty. The ID is an 8-byte array.
   @$pb.TagNumber(4)
-  $core.List<$core.int> get parentSpanId => $_getN(3);
+  $core.String get parentSpanId => $_getSZ(3);
   @$pb.TagNumber(4)
-  set parentSpanId($core.List<$core.int> v) { $_setBytes(3, v); }
+  set parentSpanId($core.String v) { $_setString(3, v); }
   @$pb.TagNumber(4)
   $core.bool hasParentSpanId() => $_has(3);
   @$pb.TagNumber(4)
